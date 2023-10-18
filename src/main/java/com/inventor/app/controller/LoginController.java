@@ -15,40 +15,41 @@ import com.inventor.app.model.Usuario;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @Controller
-@RequestMapping("/login")
 public class LoginController {
 
-	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    
     @RequestMapping("/loguear")
     public ModelAndView loguear(@Validated Usuario user, BindingResult result) {
-        ModelAndView model = new ModelAndView();
-      
-        model.setViewName("login"); 
-        return model;
-    }
-    @RequestMapping("/iniciar")
-    public ModelAndView createUser( Usuario user, BindingResult result) {
         ModelAndView model = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
             model.setViewName("consultas/reporte");
         } else {
-                        model.setViewName("login");
+            model.setViewName("login");
 
         }
         return model;
     }
 
+    @RequestMapping("/iniciar")
+    public ModelAndView createUser(Usuario user, BindingResult result) {
+        ModelAndView model = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.isAuthenticated()) {
+            model.setViewName("consultas/reporte");
+        } else {
+            model.setViewName("login");
 
-    @RequestMapping(value="/logout")
+        }
+        return model;
+    }
+
+    @RequestMapping(value = "/logout")
     public String logout() {
-        
+
         return "index";
     }
-    
 
 }

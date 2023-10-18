@@ -61,16 +61,22 @@ model.addAttribute("message", msg);
    @RequestMapping("/buscar")
     public String GoBuscar(Model model) {
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
+	if (auth.isAuthenticated()) {
 	model.addAttribute("message", "fUNCION BUSCAR");
 
         return "consultas/reporte";
+	} 
+		return "index";
     }
    @RequestMapping("/listar")
     public String Golistar(Model model) {
-	model.addAttribute("message", "FUNCION LISTAR ");
+	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	if (auth.isAuthenticated()) {
+	model.addAttribute("message", "fUNCION listar");
 
         return "consultas/reporte";
+	} 
+		return "index";
     }
 
 

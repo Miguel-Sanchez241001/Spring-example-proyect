@@ -66,7 +66,7 @@ public class SecurityConfiguration{
 				.requestMatchers( "/", "/home").permitAll()
                 .requestMatchers("/public/**").permitAll()
 				.requestMatchers("/error/**").permitAll()
-				.requestMatchers("/login/**").permitAll()
+				.requestMatchers("/loguear/**").authenticated()
 				.requestMatchers("/consultas/**").permitAll()
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
 				.requestMatchers("/buscar/**").hasAnyRole("ADMIN")
@@ -76,7 +76,8 @@ public class SecurityConfiguration{
 				
 				)
 				
-                .formLogin(t -> t.loginPage("/login/loguear")
+                .formLogin(t -> t.
+					loginPage("/loguear")
 					.usernameParameter("user")
 					.passwordParameter("pass") 
 					.loginProcessingUrl("/iniciar")
@@ -87,7 +88,7 @@ public class SecurityConfiguration{
                 .logout(t ->
 				t
 				.invalidateHttpSession(true)
-				.logoutUrl("/login/logout"))
+				.logoutUrl("/logout"))
 				.httpBasic(Customizer.withDefaults())
 				;
 
