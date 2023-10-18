@@ -1,12 +1,18 @@
 package com.inventor.app.config;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+
+import com.inventor.app.security.InMemoryUserDetail;
 
 import org.springframework.security.config.Customizer;
 
@@ -16,7 +22,8 @@ import org.springframework.security.config.Customizer;
 @EnableWebSecurity
 public class SecurityConfiguration{
   
-
+	@Autowired
+	InMemoryUserDetail userDetailsService;
 	/**
 	 * @HttpSecurity: es equivalente a trabajar con un fichero XML en los que
 	 *                definir la seguridad de las peticiones. Por tanto, esta clase
@@ -51,24 +58,36 @@ public class SecurityConfiguration{
         
     // }
 
- @Bean
+	 @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
-		http.csrf((csrf) -> csrf.disable()).
+		http.//csrf((csrf) -> csrf.disable()).
                 authorizeHttpRequests((requests) -> requests
 				.requestMatchers( "/", "/home").permitAll()
                 .requestMatchers("/public/**").permitAll()
 				.requestMatchers("/error/**").permitAll()
+				.requestMatchers("/login/**").permitAll()
+				.requestMatchers("/consultas/**").permitAll()
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-				.requestMatchers("/buscar/**").hasAnyRole("USER")
-				.requestMatchers("/listar/**").hasAnyRole("USER")
+				.requestMatchers("/buscar/**").hasAnyRole("ADMIN")
+				.requestMatchers("/listar/**").hasAnyRole("ADMIN")
 
                 .requestMatchers("/private/**").authenticated()
 				
 				)
 				
-                .formLogin(Customizer.withDefaults())
-                
+                .formLogin(t -> t.loginPage("/login/loguear")
+					.usernameParameter("user")
+					.passwordParameter("pass") 
+					.loginProcessingUrl("/iniciar")
+					.successHandler((request, response, authentication) -> response.
+					sendRedirect("/consultas/reporte") )
+					
+					)
+                .logout(t ->
+				t
+				.invalidateHttpSession(true)
+				.logoutUrl("/login/logout"))
 				.httpBasic(Customizer.withDefaults())
 				;
 
@@ -77,7 +96,10 @@ public class SecurityConfiguration{
         return http.build();
     }
 
-
+	@Bean
+    public UserDetailsService userDetailsService() {
+        return this.userDetailsService;
+    }
     
     // @Bean
     // public InMemoryUserDetailsManager userDetailsManager(){

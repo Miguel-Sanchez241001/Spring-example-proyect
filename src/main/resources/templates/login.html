@@ -8,13 +8,35 @@
 <body>
    
     
-<header  th:replace="~{plantilla/menu :: menu}" ></header>
 
-<div id="cuerpo">
-
-    <h1>Contenido de la página de búsqueda</h1>
-    <h2 th:text="${message}" ></h2>
-</div>
+<form th:action="@{/login/iniciar}" th:object="${usuario}" method="post">
+    <div class="errorblock" th:if="${#fields.hasErrors('*')}">
+        <ul>
+            <li th:each="err : ${#fields.errors('*')}"
+                th:text="${err}">Input is incorrect</li>
+        </ul>
+    </div>
+    <fieldset>
+        <legend>Datos del usuario</legend>
+        <table>
+            <tr>
+                <td><input type="text" name="user" th:field="*{nombre}" /></td>
+            </tr>
+          
+          
+            <tr>
+                <td><input type="password" name="pass" th:field="*{password}" /></td>
+            </tr>
+         
+        
+            <tr>
+                <td>
+                    <button type="submit">Registrar...</button>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</form>
 
 <footer  th:replace="~{plantilla/plantilla :: plantilla}" ></footer>
 

@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
+   
     
+<header  th:replace="~{plantilla/menu :: menu}" ></header>
+
+<div id="cuerpo">
+
+    <h1>Contenido de la página de búsqueda</h1>
+    <h2 th:text="${message}" ></h2>
+</div>
+
+<footer  th:replace="~{plantilla/plantilla :: plantilla}" ></footer>
+
+
 </body>
 </html>
