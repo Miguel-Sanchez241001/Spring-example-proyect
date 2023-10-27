@@ -1,24 +1,32 @@
 package com.inventor.app.controller;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class ContenController {
     
 
+
   
 	private static final Logger logger = LoggerFactory.getLogger(ContenController.class);
 
 	// Ejemplo de end point PUBLICO
-	@GetMapping(value = "/public")
+	@GetMapping(value = "/")
 	public String endPointPublico(HttpServletRequest request, Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String msg = "Estás accediendo al end point sin realizar una autentificación ya que es un end point publico";
@@ -43,21 +51,24 @@ model.addAttribute("message", msg);
 	@GetMapping(value = "/admin")
 	public String HelloWorld(HttpServletRequest request,Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
+		String mensaje = "";
 		if (request.isUserInRole("ADMIN")) {
-			logger.info("El usuario " + auth.getName() + " tiene el rol de ADMIN por tanto puede acceder al recurso");
+			mensaje ="El usuario " + auth.getName() + " tiene el rol de ADMIN por tanto puede acceder al recurso";
 		} else {
-			logger.info("El usuario " + auth.getName() + " no tiene el rol de ADMIN por tanto no puede acceder al recurso");
+			mensaje = "El usuario " + auth.getName() + " no tiene el rol de ADMIN por tanto no puede acceder al recurso";
 		}
-	model.addAttribute("message", "Puedes acceder a este recurso");
+	model.addAttribute("message", mensaje);
 		return "consultas/reporte";
 	}
     
-    @RequestMapping("/")
+    @RequestMapping("/index2")
     public String Goindex() {
 
-        return "index";
+        return "login";
     }
+
+
+
    @RequestMapping("/buscar")
     public String GoBuscar(Model model) {
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -68,17 +79,17 @@ model.addAttribute("message", msg);
 	} 
 		return "index";
     }
-   @RequestMapping("/listar")
-    public String Golistar(Model model) {
-	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	if (auth.isAuthenticated()) {
-	model.addAttribute("message", "fUNCION listar");
+   @RequestMapping("/index")
+    public String Golistar() {
 
-        return "consultas/reporte";
-	} 
 		return "index";
     }
 
+
+	@GetMapping("/login")
+	public String login() {
+		  return "login";
+	}
 
 
 
