@@ -1,6 +1,5 @@
 package com.inventor.app.config;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,15 +23,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
-
 import org.springframework.security.config.Customizer;
-
-
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration{
-  
+public class SecurityConfiguration {
+
 	/**
 	 * @HttpSecurity: es equivalente a trabajar con un fichero XML en los que
 	 *                definir la seguridad de las peticiones. Por tanto, esta clase
@@ -55,138 +51,116 @@ public class SecurityConfiguration{
 	 *             SegurityContextHolder para que posteriormente podamos consultar
 	 *             dicha autentificación en el futuro.
 	 */
-    // @Bean
-    // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+	// @Bean
+	// public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
-    //     http
-    //     .authorizeHttpRequests((authz) -> authz
-    //         .anyRequest().authenticated()
-    //     )
-    //     .httpBasic(withDefaults());
-    // return http.build();
-        
-    // }
+	// http
+	// .authorizeHttpRequests((authz) -> authz
+	// .anyRequest().authenticated()
+	// )
+	// .httpBasic(withDefaults());
+	// return http.build();
 
-	//  @Bean
-    // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+	// }
 
-	// 	http.//csrf((csrf) -> csrf.disable()).
-    //             authorizeHttpRequests((requests) -> requests
-	// 			.requestMatchers( "/", "/home").permitAll()
-    //             .requestMatchers("/public/**").permitAll()
-	// 			.requestMatchers("/error/**").permitAll()
-	// 			.requestMatchers("/loguear/**").authenticated()
-	// 			.requestMatchers("/consultas/**").permitAll()
-    //             .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-	// 			.requestMatchers("/buscar/**").hasAnyRole("ADMIN")
-	// 			.requestMatchers("/listar/**").hasAnyRole("ADMIN")
+	// @Bean
+	// public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
-    //             .requestMatchers("/private/**").authenticated()
-				
-	// 			)
-				
-    //             .formLogin(t -> t.
-	// 				loginPage("/loguear")
-	// 				.usernameParameter("user")
-	// 				.passwordParameter("pass") 
-	// 				.loginProcessingUrl("/iniciar")
-	// 				.successHandler((request, response, authentication) -> response.
-	// 				sendRedirect("/consultas/reporte") )
-					
-	// 				)
-    //             .logout(t ->
-	// 			t
-	// 			.invalidateHttpSession(true)
-	// 			.logoutUrl("/logout"))
-	// 			.httpBasic(Customizer.withDefaults())
-	// 			;
+	// http.//csrf((csrf) -> csrf.disable()).
+	// authorizeHttpRequests((requests) -> requests
+	// .requestMatchers( "/", "/home").permitAll()
+	// .requestMatchers("/public/**").permitAll()
+	// .requestMatchers("/error/**").permitAll()
+	// .requestMatchers("/loguear/**").authenticated()
+	// .requestMatchers("/consultas/**").permitAll()
+	// .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+	// .requestMatchers("/buscar/**").hasAnyRole("ADMIN")
+	// .requestMatchers("/listar/**").hasAnyRole("ADMIN")
 
-		
+	// .requestMatchers("/private/**").authenticated()
 
-    //     return http.build();
-    // }
+	// )
 
+	// .formLogin(t -> t.
+	// loginPage("/loguear")
+	// .usernameParameter("user")
+	// .passwordParameter("pass")
+	// .loginProcessingUrl("/iniciar")
+	// .successHandler((request, response, authentication) -> response.
+	// sendRedirect("/consultas/reporte") )
 
+	// )
+	// .logout(t ->
+	// t
+	// .invalidateHttpSession(true)
+	// .logoutUrl("/logout"))
+	// .httpBasic(Customizer.withDefaults())
+	// ;
 
-		// configuracion web security 
-		@Bean
-		public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-			return http
-					.csrf(c -> c.disable())   // vulnerabilidad de formularios se capturan los datos en el cmaino
-					.authorizeHttpRequests(auth -> {
+	// return http.build();
+	// }
+
+	// configuracion web security
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		return http
+				.csrf(c -> c.disable()) // vulnerabilidad de formularios se capturan los datos en el cmaino
+				.authorizeHttpRequests(auth -> {
 					auth.requestMatchers("/index").permitAll();
 					auth.requestMatchers("/").permitAll();
 
 					auth.anyRequest().authenticated();
 				})
 				.formLogin(login -> {
-					
+
 					login.permitAll();
 					login.loginPage("/login");
-					login.successHandler((request, response, authentication) -> response.sendRedirect("/") );
-				
-				} )
+					login.successHandler((request, response, authentication) -> response.sendRedirect("/"));
+
+				})
 
 				.sessionManagement(sesionconfig -> {
 					sesionconfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
 					sesionconfig.invalidSessionUrl("/login");
 					sesionconfig.maximumSessions(1)
-					.expiredUrl("/login")
-					.sessionRegistry(sessionRegistry())
-					;
-					
+							.expiredUrl("/login")
+							.sessionRegistry(sessionRegistry());
+
 					sesionconfig.sessionFixation()
-					
-					.migrateSession(); // previene que se obtenga el ID de session 
-					
+
+							.migrateSession(); // previene que se obtenga el ID de session
 
 				})
-				
-				
-			.build();	
+				.build();
 
+	}
 
-		}
+	// registro de sesiones
+	@Bean
+	public SessionRegistry sessionRegistry() {
+		return new SessionRegistryImpl();
+	}
 
+	// autenticacion en memoria
+	@Bean
+	public UserDetailsService userDetailsService() {
+		List<UserDetails> users = new ArrayList<>();
 
-		// registro de sesiones
-@Bean
-public SessionRegistry sessionRegistry(){
-	return new SessionRegistryImpl();
-}
+		UserDetails admin = User.builder()
+		.username("admin")
+		.password("{noop}admin")
+		.roles("ADMIN")
+		.build();
+		users.add(admin);
+		UserDetails usuario = User.builder().username("usuario").password("{noop}usuario").roles("USER")
+				.build();
+		users.add(usuario);
+			UserDetails DEV = User.builder().username("desa").password("{noop}desa").roles("desa")
+				.build();
+		users.add(DEV);
+		return new InMemoryUserDetailsManager(users);
+	}
 
-
-
-// autenticacion en memoria
-@Bean
-    public UserDetailsService userDetailsService() {
-		        List<UserDetails> users = new ArrayList<>();
-
-        UserDetails admin = User.builder().username("admin").password("{noop}admin").roles("ADMIN")
-                .build();
-				users.add(admin);
-				UserDetails usuario = User.builder().username("usuario").password("{noop}usuario").roles("USER")
-                .build();
-				users.add(usuario);
-        return new InMemoryUserDetailsManager(users);
-    }
-    
-
-
-
-
-
-    // @Bean
-    // public InMemoryUserDetailsManager userDetailsManager(){
-
-    //     return new InMemoryUserDetailsManager(
-    //             new User(
-    //                 "username",
-    //                 "password", 
-    //                 Arrays.asList(new SimpleGrantedAuthority("ADMIN"))
-    //                     )
-    //     );
-    // }
-
+	
 
 }
