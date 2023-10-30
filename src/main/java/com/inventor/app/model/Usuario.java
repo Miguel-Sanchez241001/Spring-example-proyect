@@ -26,5 +26,8 @@ public class Usuario {
     private Integer userEdad;
 
     private String userSexo;
+    
+    private String userTipo;
+
 
 }

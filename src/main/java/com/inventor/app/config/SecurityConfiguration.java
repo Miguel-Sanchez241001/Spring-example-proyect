@@ -106,9 +106,8 @@ public class SecurityConfiguration {
 		return http
 				.csrf(c -> c.disable()) // vulnerabilidad de formularios se capturan los datos en el cmaino
 				.authorizeHttpRequests(auth -> {
-					auth.requestMatchers("/index").permitAll();
-					auth.requestMatchers("/").permitAll();
-
+					auth.requestMatchers("/index","/").permitAll();
+					auth.requestMatchers("/doctor/**").hasRole("DOCTOR");
 					auth.anyRequest().authenticated();
 				})
 				.formLogin(login -> {
