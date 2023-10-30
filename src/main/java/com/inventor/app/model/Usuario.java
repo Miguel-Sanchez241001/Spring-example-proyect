@@ -15,19 +15,16 @@ import lombok.ToString;
 public class Usuario {
 
 
-    private String nombre;
+    private Long userId;
 
-    private String apellido;
+    private String userNombre;
 
+    private String userApellido;
     
-    private String correo;
+    private String userCorreo;
 
-    private String password;
+    private Integer userEdad;
 
-
-    private Integer edad;
-
-   
-    private Boolean sexo;
+    private String userSexo;
 
 }

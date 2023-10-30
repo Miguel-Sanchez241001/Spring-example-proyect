@@ -141,23 +141,37 @@ public class SecurityConfiguration {
 		return new SessionRegistryImpl();
 	}
 
-	// autenticacion en memoria
+
+
+
+
+
+
+	// ROLES 
 	@Bean
 	public UserDetailsService userDetailsService() {
 		List<UserDetails> users = new ArrayList<>();
 
-		UserDetails admin = User.builder()
-		.username("admin")
-		.password("{noop}admin")
-		.roles("ADMIN")
+		UserDetails Pmedico = User.builder()
+		.username("pmedico")
+		.password("{noop}pmedico")
+		.roles("PMEDICO")
 		.build();
-		users.add(admin);
-		UserDetails usuario = User.builder().username("usuario").password("{noop}usuario").roles("USER")
+		users.add(Pmedico);
+		UserDetails doctor = User.builder()
+		.username("doctor")
+		.password("{noop}doctor")
+		.roles("DOCTOR")
 				.build();
-		users.add(usuario);
-			UserDetails DEV = User.builder().username("desa").password("{noop}desa").roles("desa")
+		users.add(doctor);
+
+		UserDetails PACIENTE = User.builder()
+		.username("paciente")
+		.password("{noop}paciente")
+		.roles("PACIENTE")
 				.build();
-		users.add(DEV);
+		users.add(PACIENTE);
+
 		return new InMemoryUserDetailsManager(users);
 	}
 
