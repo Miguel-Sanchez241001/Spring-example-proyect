@@ -1,32 +1,35 @@
 package com.inventor.app.service.impl;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.inventor.app.model.Paciente;
+import com.inventor.app.repository.PacienteRepo;
 import com.inventor.app.service.PacienteService;
 
 public class PacienteServiceImpl implements PacienteService  {
 
-
-
+@Autowired
+    private PacienteRepo pacienteRepo;
     
 
     @Override
     public Paciente savePaciente(Paciente pd) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'savePaciente'");
+        return  pacienteRepo.save(pd);
     }
 
     @Override
     public List<Paciente> getAllPacientes() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllPacientes'");
+              return  (List)pacienteRepo.findAll();
+
     }
 
     @Override
-    public Paciente getPacientebyId(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPacientebyId'");
+    public Optional<Paciente> getPacientebyId(Long id) {
+              return  pacienteRepo.findById(id);
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.inventor.app.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.inventor.app.model.Historia;
 
@@ -11,7 +12,7 @@ public interface HistoriaService {
 
     List<Historia> getAllHistorias();
 
-    Historia getHistoriabyId(Long id);
+    Optional<Historia> getHistoriabyId(Long id);
 
 
     Historia updateHistoria(Historia pd,Long id);

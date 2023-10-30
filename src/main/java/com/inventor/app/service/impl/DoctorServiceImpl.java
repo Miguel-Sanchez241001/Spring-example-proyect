@@ -1,43 +1,57 @@
 package com.inventor.app.service.impl;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.inventor.app.model.Doctor;
+import com.inventor.app.repository.DoctorRepo;
 import com.inventor.app.service.DoctorService;
 
+
+
+@Service
 public class DoctorServiceImpl implements DoctorService {
 
 
 
-    
+    @Autowired
+    private DoctorRepo doctorrepo;
+
+
+
+
+
+
+
+
     @Override
     public Doctor saveDoctor(Doctor pd) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'saveDoctor'");
+
+       return doctorrepo.save(pd);
+
     }
 
     @Override
     public List<Doctor> getAllDoctors() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllDoctors'");
+        return (List) doctorrepo.findAll();
     }
 
     @Override
-    public Doctor getDoctorbyId(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDoctorbyId'");
+    public Optional<Doctor> getDoctorbyId(Long id) {
+         return doctorrepo.findById(id);
     }
 
     @Override
     public Doctor updateDoctor(Doctor pd, Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateDoctor'");
+        return doctorrepo.save(pd);
     }
 
     @Override
     public void deleteDetail(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteDetail'");
+         doctorrepo.deleteById(id); 
     }
     
 }

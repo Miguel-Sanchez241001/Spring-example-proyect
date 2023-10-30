@@ -1,6 +1,7 @@
 package com.inventor.app.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.inventor.app.model.Doctor;
 
@@ -10,7 +11,7 @@ public interface DoctorService {
 
     List<Doctor> getAllDoctors();
 
-    Doctor getDoctorbyId(Long id);
+    Optional<Doctor> getDoctorbyId(Long id);
 
 
     Doctor updateDoctor(Doctor pd,Long id);
