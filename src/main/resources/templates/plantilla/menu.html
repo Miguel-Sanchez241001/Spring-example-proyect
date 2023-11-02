@@ -27,6 +27,9 @@
           <li th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="nav-item">
             <a class="nav-link"href="/session">session</a>
           </li>
+          <li th:if="${#authorization.expression('hasRole(''ROLE_PMEDICO'')')}" class="nav-item">
+            <a class="nav-link"href="/prepararnuevo">registrar</a>
+          </li>
           <li th:if="${#authorization.expression('isAuthenticated()')}" class="nav-item">
             <a class="nav-link"href="/logout">logout</a>
           </li>
