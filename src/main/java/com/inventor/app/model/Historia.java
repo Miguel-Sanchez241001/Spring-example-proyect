@@ -16,7 +16,7 @@ import lombok.Setter;
 public class Historia {
  @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
-    private String idHist;
+    private Long idHist;
     @OneToOne
     private Paciente histPaciente;
     @OneToOne

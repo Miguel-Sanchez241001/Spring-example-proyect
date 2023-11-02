@@ -14,11 +14,19 @@ import lombok.Setter;
 @Entity
 public class Credenciales {
     
-     @Id
+  
+
+  @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
     private Long idUserCre;
 
     private String creUsername;
 
     private String crePassword;
+
+    public Credenciales(String usermane, String password) {
+
+      creUsername = usermane;
+      crePassword = password;
+  }
 }

@@ -16,34 +16,76 @@
     
     <div id="cuerpo">
         <h1>Formulario de Usuario</h1>
-        <form action="/nuevo" method="post">
+        
+        
+        <form th:if="${tipo == 'usuario'}" th:action="@{/personal/nuevo}" method="post"    th:object="${usuario}">
             <label for="userNombre">Nombre:</label>
-            <input type="text" id="userNombre" name="userNombre"><br><br>
+            <input type="text" id="userNombre" name="userNombre"     th:field="*{userNombre}"><br><br>
     
             <label for="userApellido">Apellido:</label>
-            <input type="text" id="userApellido" name="userApellido"><br><br>
+            <input type="text" id="userApellido" name="userApellido"   th:field="*{userApellido}">    <br><br>
     
             <label for="userCorreo">Correo:</label>
-            <input type="email" id="userCorreo" name="userCorreo"><br><br>
+            <input type="email" id="userCorreo" name="userCorreo"    th:field="*{userCorreo}">   <br><br>
     
             <label for="userEdad">Edad:</label>
-            <input type="number" id="userEdad" name="userEdad"><br><br>
+            <input type="number" id="userEdad" name="userEdad"       th:field="*{userEdad}">    <br><br>
     
             <label for="userSexo">Sexo:</label>
-            <input type="text" id="userSexo" name="userSexo"><br><br>
+            <select id="userSexo" name="userSexo" th:field="*{userSexo}">
+                <option value="MUJER">Mujer</option>
+                <option value="HOMBRE">Hombre</option>
+            </select>
+            <br><br>
     
             <label for="userTipo">Tipo:</label>
-            <input type="text" id="userTipo" name="userTipo"><br><br>
-    
+            <select id="userTipo" name="userTipo" th:field="*{userTipo}">
+                <option value="paciente">Paciente</option>
+                <option value="doctor">Doctor</option>
+                <option value="personal">Personal</option>
+            </select>
+            <br><br>
             <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password"><br><br> 
+            <input type="password" id="password" name="password"            ><br><br> 
+            <input type="submit" value="Enviar">
+            
+        </form>
+
+        <form th:if="${tipo == 'paciente'}" th:action="@{/personal/savepaciente}" method="post"    th:object="${paciente}">
+            <label for="userNombre">Nacimiento:</label>
+            <input type="text" id="userNombre" name="Nacimiento"     th:field="*{pacFechaNacimiento}"><br><br>
+    
+            <label for="userApellido">Direccion:</label>
+            <input type="text" id="userApellido" name="Direccion"   th:field="*{pacDireccion}">    <br><br>
+    
+            <label for="userCorreo">Telefono:</label>
+            <input type="text" id="userCorreo" name="telefono"    th:field="*{pacNumeroTelefono}">   <br><br>
+
+             
+            <input type="text" style="display: none;" name="iduser"    th:value="${idUser}"> 
+            <input type="submit" value="Enviar">
+            
+        </form>
+
+
+        <form th:if="${tipo == 'doctor'}" th:action="@{/personal/savedoctor}" method="post"    th:object="${doctor}">
+            <label for="userNombre">Especialidad:</label>
+            <input type="text" id="userNombre" name="Especialidad"     th:field="*{docEspecialidad}"><br><br>
+    
+            <label for="userApellido">Consultorio:</label>
+            <input type="text" id="userApellido" name="consultorio"   th:field="*{docConsultorio}">    <br><br>
+    
+            <label for="userCorreo">Telefono:</label>
+            <input type="text" id="userCorreo" name="telefono"    th:field="*{docnumeroTelefono}">   <br><br>
+    
+            <input type="text" style="display: none;" name="iduser"    th:value="${idUser}"> 
             <input type="submit" value="Enviar">
             
         </form>
 
 
     </div>
-    
+        <p th:text="${mensaje}"></p>
     <footer  th:replace="~{plantilla/plantilla :: plantilla}" ></footer>
     
     

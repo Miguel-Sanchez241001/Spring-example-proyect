@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.inventor.app.model.Paciente;
 import com.inventor.app.repository.PacienteRepo;
 import com.inventor.app.service.PacienteService;
 
+@Service
 public class PacienteServiceImpl implements PacienteService  {
 
 @Autowired
@@ -22,7 +24,7 @@ public class PacienteServiceImpl implements PacienteService  {
 
     @Override
     public List<Paciente> getAllPacientes() {
-              return  (List)pacienteRepo.findAll();
+              return  (List<Paciente>)pacienteRepo.findAll();
 
     }
 

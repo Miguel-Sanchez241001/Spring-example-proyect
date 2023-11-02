@@ -36,7 +36,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<Doctor> getAllDoctors() {
-        return (List) doctorrepo.findAll();
+        return (List<Doctor>) doctorrepo.findAll();
     }
 
     @Override

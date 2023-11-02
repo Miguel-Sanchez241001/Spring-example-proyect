@@ -23,12 +23,19 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
+import com.inventor.app.service.PmedicoService;
+
 import org.springframework.security.config.Customizer;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+
+
+	@Autowired
+	private PmedicoService usuarioServiceImpl;
+	
 	/**
 	 * @HttpSecurity: es equivalente a trabajar con un fichero XML en los que
 	 *                definir la seguridad de las peticiones. Por tanto, esta clase
@@ -149,31 +156,35 @@ public class SecurityConfiguration {
 
 
 	// ROLES 
-	@Bean
+	// @Bean
+	// public UserDetailsService userDetailsService() {
+	// 	List<UserDetails> users = new ArrayList<>();
+
+	// 	UserDetails Pmedico = User.builder()
+	// 	.username("pmedico")
+	// 	.password("{noop}pmedico")
+	// 	.roles("PMEDICO")
+	// 	.build();
+	// 	users.add(Pmedico);
+	// 	UserDetails doctor = User.builder()
+	// 	.username("doctor")
+	// 	.password("{noop}doctor")
+	// 	.roles("DOCTOR")
+	// 			.build();
+	// 	users.add(doctor);
+
+	// 	UserDetails PACIENTE = User.builder()
+	// 	.username("paciente")
+	// 	.password("{noop}paciente")
+	// 	.roles("PACIENTE")
+	// 			.build();
+	// 	users.add(PACIENTE);
+
+	// 	return new InMemoryUserDetailsManager(users);
+	// }
+@Bean
 	public UserDetailsService userDetailsService() {
-		List<UserDetails> users = new ArrayList<>();
-
-		UserDetails Pmedico = User.builder()
-		.username("pmedico")
-		.password("{noop}pmedico")
-		.roles("PMEDICO")
-		.build();
-		users.add(Pmedico);
-		UserDetails doctor = User.builder()
-		.username("doctor")
-		.password("{noop}doctor")
-		.roles("DOCTOR")
-				.build();
-		users.add(doctor);
-
-		UserDetails PACIENTE = User.builder()
-		.username("paciente")
-		.password("{noop}paciente")
-		.roles("PACIENTE")
-				.build();
-		users.add(PACIENTE);
-
-		return new InMemoryUserDetailsManager(users);
+		return username -> usuarioServiceImpl.cargarUsuarioForLogin(username);
 	}
 
 	
