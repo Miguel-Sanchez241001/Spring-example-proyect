@@ -40,9 +40,9 @@
     
             <label for="userTipo">Tipo:</label>
             <select id="userTipo" name="userTipo" th:field="*{userTipo}">
-                <option value="paciente">Paciente</option>
-                <option value="doctor">Doctor</option>
-                <option value="personal">Personal</option>
+                <option value="PACIENTE">Paciente</option>
+                <option value="DOCTOR">Doctor</option>
+                <option value="PMEDICO">Personal</option>
             </select>
             <br><br>
             <label for="password">Contraseña:</label>
@@ -53,13 +53,16 @@
 
         <form th:if="${tipo == 'paciente'}" th:action="@{/personal/savepaciente}" method="post"    th:object="${paciente}">
             <label for="userNombre">Nacimiento:</label>
-            <input type="text" id="userNombre" name="Nacimiento"     th:field="*{pacFechaNacimiento}"><br><br>
+            <input type="date" id="Nacimiento" name="Nacimiento" th:field="*{pacFechaNacimiento}">
+            <br><br>
     
             <label for="userApellido">Direccion:</label>
             <input type="text" id="userApellido" name="Direccion"   th:field="*{pacDireccion}">    <br><br>
     
             <label for="userCorreo">Telefono:</label>
-            <input type="text" id="userCorreo" name="telefono"    th:field="*{pacNumeroTelefono}">   <br><br>
+            <input type="text" id="telefono" name="telefono" th:field="*{pacNumeroTelefono}"
+                   pattern="9\d{8}" title="Ingresa un número de 9 dígitos que comience con 9" required>
+            <br><br>
 
              
             <input type="text" style="display: none;" name="iduser"    th:value="${idUser}"> 
@@ -70,15 +73,31 @@
 
         <form th:if="${tipo == 'doctor'}" th:action="@{/personal/savedoctor}" method="post"    th:object="${doctor}">
             <label for="userNombre">Especialidad:</label>
-            <input type="text" id="userNombre" name="Especialidad"     th:field="*{docEspecialidad}"><br><br>
+            <select id="especialidad" name="especialidad" th:field="*{docEspecialidad}">
+                <option value="">Selecciona una especialidad</option>
+                <option value="Cardiología">Cardiología</option>
+                <option value="Dermatología">Dermatología</option>
+                <option value="Ginecología">Ginecología</option>
+                <option value="Neurología">Neurología</option>
+                <option value="Oftalmología">Oftalmología</option>
+            </select>
     
             <label for="userApellido">Consultorio:</label>
-            <input type="text" id="userApellido" name="consultorio"   th:field="*{docConsultorio}">    <br><br>
+            <select id="consultorio" name="consultorio" th:field="*{docConsultorio}">
+                <option value="">Selecciona un consultorio</option>
+                <option value="B-105">B-105</option>
+                <option value="C-201">C-201</option>
+                <option value="D-110">D-110</option>
+                <option value="E-301">E-301</option>
+                <option value="F-205">F-205</option>
+            </select>
     
             <label for="userCorreo">Telefono:</label>
-            <input type="text" id="userCorreo" name="telefono"    th:field="*{docnumeroTelefono}">   <br><br>
-    
-            <input type="text" style="display: none;" name="iduser"    th:value="${idUser}"> 
+            <input type="text" id="telefono" name="telefono" th:field="*{docnumeroTelefono}"
+                   pattern="9\d{8}" title="Ingresa un número de 9 dígitos que comience con 9" required>
+            <br><br>
+
+            <input type="text" style="display: none;" name="iduser"    th:value="${idUser}">
             <input type="submit" value="Enviar">
             
         </form>

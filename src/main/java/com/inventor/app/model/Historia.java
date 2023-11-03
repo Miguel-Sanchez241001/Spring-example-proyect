@@ -1,13 +1,11 @@
 package com.inventor.app.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,9 +19,31 @@ public class Historia {
     private Paciente histPaciente;
     @OneToOne
     private Doctor histDoctor;
+
+
     private String histDiagnostico;
-    private String histFechaCreacion;
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime fechaHoraHistoriaAtencion;
+
+
+    private String pertenenciaEtnicaHist;
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime fechaHoraHistoriaActual;
+
+    private String LnacimientoHit;
+
+
+    private String gradoDeInstruccion;
+    private String grupoSanguineo;
+
+    private boolean factorRh;
+
+    private String dniFamiliar;
+
+
     private String histNotas;
+
+
     
 
     

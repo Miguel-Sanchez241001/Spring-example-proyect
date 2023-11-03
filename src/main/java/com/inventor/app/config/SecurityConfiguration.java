@@ -18,6 +18,9 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
@@ -33,9 +36,7 @@ public class SecurityConfiguration {
 
 
 
-	@Autowired
-	private PmedicoService usuarioServiceImpl;
-	
+
 	/**
 	 * @HttpSecurity: es equivalente a trabajar con un fichero XML en los que
 	 *                definir la seguridad de las peticiones. Por tanto, esta clase
@@ -58,54 +59,7 @@ public class SecurityConfiguration {
 	 *             SegurityContextHolder para que posteriormente podamos consultar
 	 *             dicha autentificación en el futuro.
 	 */
-	// @Bean
-	// public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-
-	// http
-	// .authorizeHttpRequests((authz) -> authz
-	// .anyRequest().authenticated()
-	// )
-	// .httpBasic(withDefaults());
-	// return http.build();
-
-	// }
-
-	// @Bean
-	// public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-
-	// http.//csrf((csrf) -> csrf.disable()).
-	// authorizeHttpRequests((requests) -> requests
-	// .requestMatchers( "/", "/home").permitAll()
-	// .requestMatchers("/public/**").permitAll()
-	// .requestMatchers("/error/**").permitAll()
-	// .requestMatchers("/loguear/**").authenticated()
-	// .requestMatchers("/consultas/**").permitAll()
-	// .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-	// .requestMatchers("/buscar/**").hasAnyRole("ADMIN")
-	// .requestMatchers("/listar/**").hasAnyRole("ADMIN")
-
-	// .requestMatchers("/private/**").authenticated()
-
-	// )
-
-	// .formLogin(t -> t.
-	// loginPage("/loguear")
-	// .usernameParameter("user")
-	// .passwordParameter("pass")
-	// .loginProcessingUrl("/iniciar")
-	// .successHandler((request, response, authentication) -> response.
-	// sendRedirect("/consultas/reporte") )
-
-	// )
-	// .logout(t ->
-	// t
-	// .invalidateHttpSession(true)
-	// .logoutUrl("/logout"))
-	// .httpBasic(Customizer.withDefaults())
-	// ;
-
-	// return http.build();
-	// }
+	
 
 	// configuracion web security
 	@Bean
@@ -114,10 +68,12 @@ public class SecurityConfiguration {
 				.csrf(c -> c.disable()) // vulnerabilidad de formularios se capturan los datos en el cmaino
 				.authorizeHttpRequests(auth -> {
 					auth.requestMatchers("/index","/").permitAll()
+							.requestMatchers("../assets/**").permitAll()
 					.requestMatchers("/doctor/**").hasRole("DOCTOR")
 					.requestMatchers("/personal/**").hasRole("PMEDICO")
-					.requestMatchers("/personal/prepararnuevo").hasRole("PMEDICO")
-					.anyRequest().authenticated();
+					.requestMatchers("/paciente/**").hasRole("PACIENTE")
+
+							.anyRequest().authenticated();
 				})
 				.formLogin(login -> {
 
@@ -155,38 +111,42 @@ public class SecurityConfiguration {
 
 
 
-	// ROLES 
-	// @Bean
-	// public UserDetailsService userDetailsService() {
-	// 	List<UserDetails> users = new ArrayList<>();
+	// ROLES
+//	 @Bean
+//    public UserDetailsService userDetailsService() {
+//  		List<UserDetails> users = new ArrayList<>();
+//
+//  		UserDetails Pmedico = User.builder()
+//  		.username("pmedico")
+//  		.password("{noop}pmedico")
+//  		.roles("PMEDICO")
+//  		.build();
+//  		users.add(Pmedico);
+//  		UserDetails doctor = User.builder()
+//  		.username("doctor")
+//  		.password("{noop}doctor")
+// 		.roles("DOCTOR").build();
+//  		users.add(doctor);
+//
+//  		UserDetails PACIENTE = User.builder()
+//  		.username("paciente")
+//  		.password("{noop}paciente")
+//  		.roles("PACIENTE")
+// 				.build();
+//  		users.add(PACIENTE);
+//
+//  		return new InMemoryUserDetailsManager(users);
+//     }
 
-	// 	UserDetails Pmedico = User.builder()
-	// 	.username("pmedico")
-	// 	.password("{noop}pmedico")
-	// 	.roles("PMEDICO")
-	// 	.build();
-	// 	users.add(Pmedico);
-	// 	UserDetails doctor = User.builder()
-	// 	.username("doctor")
-	// 	.password("{noop}doctor")
-	// 	.roles("DOCTOR")
-	// 			.build();
-	// 	users.add(doctor);
+// @Bean
+// 	public UserDetailsService userDetailsService() {
+// 		return username -> usuarioServiceImpl.cargarUsuarioForLogin(username);
+// 	}
 
-	// 	UserDetails PACIENTE = User.builder()
-	// 	.username("paciente")
-	// 	.password("{noop}paciente")
-	// 	.roles("PACIENTE")
-	// 			.build();
-	// 	users.add(PACIENTE);
 
-	// 	return new InMemoryUserDetailsManager(users);
-	// }
-@Bean
-	public UserDetailsService userDetailsService() {
-		return username -> usuarioServiceImpl.cargarUsuarioForLogin(username);
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return NoOpPasswordEncoder.getInstance(); //No apto para producción
+		//return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
-
-	
-
 }

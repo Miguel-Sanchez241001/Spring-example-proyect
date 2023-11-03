@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.inventor.app.model.Paciente;
+import com.inventor.app.model.Usuario;
 
 public interface PacienteService {
 
@@ -16,6 +17,6 @@ public interface PacienteService {
 
 
     Paciente updatePaciente(Paciente pd,Long id);
-    
+    Paciente buscarPacienteByUsuario(String username);
     void deleteDetail(Long id);
 }

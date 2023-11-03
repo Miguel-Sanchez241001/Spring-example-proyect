@@ -1,5 +1,8 @@
 package com.inventor.app.controller;
 
+import com.inventor.app.model.Usuario;
+import com.inventor.app.repository.CredencialesRepo;
+import com.inventor.app.repository.UsuarioRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,13 +25,20 @@ public class ContenController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ContenController.class);
 
+
+	@Autowired
+	private UsuarioRepo usuarioRepo;
+	@Autowired
+	private CredencialesRepo credencialesRepo;
 	// Ejemplo de end point PUBLICO
 	@GetMapping(value = "/")
 	public String endPointPublico(HttpServletRequest request, Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String msg = "Estás accediendo al end point sin realizar una autentificación ya que es un end point publico";
 		if (auth.isAuthenticated()) {
-			msg = "Pese a no necesitarse ya que es un end point publico estás autentificado como " + auth.getName();
+
+			Usuario usuario = usuarioRepo.findByCredenciales( credencialesRepo.findByCreUsername(auth.getName()).get()).get();
+			msg = "Bienvenido" + usuario.getUserNombre() ;
 		}
 		model.addAttribute("message", msg);
 

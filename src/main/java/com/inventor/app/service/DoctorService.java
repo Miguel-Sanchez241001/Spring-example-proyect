@@ -17,4 +17,6 @@ public interface DoctorService {
     Doctor updateDoctor(Doctor pd,Long id);
     
     void deleteDetail(Long id);
+
+    Doctor buscarPacienteByUsuario(String name);
 }

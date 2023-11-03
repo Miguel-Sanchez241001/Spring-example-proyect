@@ -21,7 +21,7 @@ public interface PmedicoService {
     
     void deleteDetail(Long id);
 
-UserDetails cargarUsuarioForLogin(String username);
+
 
 
     
