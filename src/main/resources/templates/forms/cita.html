@@ -29,6 +29,39 @@
             $("#tabla-citas").show();
         });
     });
+
+    $(document).ready(function() {
+        $('#especialidadId').change(function() {
+            var selectedSpecialtyId = $(this).val();
+            $.get('/api/cita/especialidad/' + selectedSpecialtyId, function(data) {
+                // Actualiza el segundo select con la lista de doctores
+                var doctorSelect = $('#doctorSelect');
+                doctorSelect.empty();
+                doctorSelect.append($('<option>').val("0").text("Seleccione a un doctor"));
+                for (var i = 0; i < data.length; i++) {
+                    doctorSelect.append($('<option>').val(data[i].docId).text(data[i].docUsuario["userNombre"]));
+                };
+            });
+        });
+        $('#fechaHoraCita').change(function() {
+
+            const doctorSelect = $('#doctorSelect').val();
+            const fecha = $(this).val();
+            $.get('/api/cita/horario/' + doctorSelect+'/'+fecha, function(data) {
+                // Actualiza el segundo select con la lista de doctores
+                var horarioSelect = $('#horarioSelect');
+                horarioSelect.empty();
+                horarioSelect.append($('<option>').val("0").text("Seleccione un Horario"));
+                for (var i = 0; i < data.length; i++) {
+                    horarioSelect.append($('<option>').val(data[i].idHorario).text(data[i].rango));
+                };
+            });
+        });
+
+
+
+    });
+
 </script>
 
 <header  th:replace="~{plantilla/menu :: menu}" ></header>
@@ -39,20 +72,37 @@
 
     <button th:if="${#authorization.expression('hasRole(''ROLE_PACIENTE'')')}" id="crear-cita">Crear cita</button>
 
+    <button id="ver-citas">Ver citas</button>
+
     <div th:if="${#authorization.expression('hasRole(''ROLE_PACIENTE'')')}" id="formulario-cita" style="display: none;">
 
         <form th:action="@{/paciente/citasave}" th:object="${nuevaCita}" method="post">
 
 
 
-            <input type="datetime-local" id="fechaHoraCita" th:field="*{fechaHoraCita}">
 
 
-
-
-            <select id="doctor"  th:field="*{doctor}">
-                <option th:each="doctor : ${doctores}" th:value="${doctor.docId}" th:text="${doctor.docUsuario.getUserNombre()}"></option>
+            <label >Especialidad:</label>
+            <select id="especialidadId" name="especialidad" >
+                <option value="">Selecciona una especialidad</option>
+                <option value="Cardiología">Cardiología</option>
+                <option value="Dermatología">Dermatología</option>
+                <option value="Ginecología">Ginecología</option>
+                <option value="Neurología">Neurología</option>
+                <option value="Oftalmología">Oftalmología</option>
             </select>
+
+
+            <select id="doctorSelect"  th:field="*{doctor}">
+                <option value="">Seleccione un doctor</option>
+            </select>
+            <input type="date" id="fechaHoraCita" th:field="*{fechaCita}">
+
+
+            <select id="horarioSelect" name="horario" th:field="*{horario}">
+                <option value="">Seleccione un horario</option>
+            </select>
+
 
             <input type="submit" value="Enviar">
             </form>
@@ -67,7 +117,7 @@
             </tr>
 
             <tr th:each="cita : ${citas}">
-                <td ><input type="datetime-local"  th:value="${cita.fechaHoraCita}"></td>
+                <td > <input type="date"  th:value="${cita.fechaCita}"></td>
                 <td th:text="${cita.doctor.getDocEspecialidad()}"></td>
                 <td th:text="${cita.doctor.getDocUsuario().getUserNombre()}"></td>
                 <td th:text="${cita.estado}"></td>
@@ -79,7 +129,12 @@
     </div>
 
 
-    <button id="ver-citas">Ver citas</button>
+
+
+
+
+
+
 
     <div th:if="${#authorization.expression('hasRole(''ROLE_PMEDICO'')')}" id="tabla-citas" style="display: none;">
         <table>
@@ -95,7 +150,7 @@
             <tr th:each="cita : ${citas}" >
 
                 <form th:action="@{/personal/actualizarestado}" method="post" >
-                    <td ><input type="datetime-local"  th:value="${cita.fechaHoraCita}" ></td>
+                    <td > <input type="date"  th:value="${cita.fechaCita}" ></td>
                     <td th:text="${cita.doctor.getDocEspecialidad()}"></td>
                     <td th:text="${cita.doctor.getDocUsuario().getUserNombre()}"></td>
                     <td>
@@ -135,7 +190,7 @@
             <tr th:each="cita : ${citas}" >
 
                 <form th:action="@{/doctor/actualizarestado}" method="post" >
-                    <td ><input type="datetime-local"  th:value="${cita.fechaHoraCita}" ></td>
+                    <td > <input type="date"  th:value="${cita.fechaCita}" ></td>
                     <td th:text="${cita.doctor.getDocEspecialidad()}"></td>
                     <td th:text="${cita.doctor.getDocUsuario().getUserNombre()}"></td>
                     <td>
@@ -159,8 +214,31 @@
         </table>
     </div>
 
+
+
+
+
+
+
+
+
 </div>
 <p th:text="${mensaje}"></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <footer  th:replace="~{plantilla/plantilla :: plantilla}" ></footer>
 
 

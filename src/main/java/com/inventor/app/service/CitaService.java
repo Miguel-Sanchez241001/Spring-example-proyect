@@ -2,6 +2,7 @@ package com.inventor.app.service;
 
 import com.inventor.app.model.Cita;
 import com.inventor.app.model.Doctor;
+import com.inventor.app.model.Horario;
 import com.inventor.app.model.Paciente;
 
 import java.util.List;
@@ -22,8 +23,6 @@ public interface CitaService {
     public Cita buscarCita(Long id);
 
     public void cambiarEstadoCita(Cita cita);
-
-
 
 
 }

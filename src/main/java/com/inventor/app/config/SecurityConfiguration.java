@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.context.annotation.Configuration;
@@ -66,9 +67,10 @@ public class SecurityConfiguration {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		return http
 				.csrf(c -> c.disable()) // vulnerabilidad de formularios se capturan los datos en el cmaino
+
 				.authorizeHttpRequests(auth -> {
-					auth.requestMatchers("/index","/").permitAll()
-							.requestMatchers("../assets/**").permitAll()
+					auth.requestMatchers("/").permitAll()
+							.requestMatchers("../static/**").permitAll()
 					.requestMatchers("/doctor/**").hasRole("DOCTOR")
 					.requestMatchers("/personal/**").hasRole("PMEDICO")
 					.requestMatchers("/paciente/**").hasRole("PACIENTE")
@@ -79,7 +81,36 @@ public class SecurityConfiguration {
 
 					login.permitAll();
 					login.loginPage("/login");
-					login.successHandler((request, response, authentication) -> response.sendRedirect("/"));
+					login.successHandler((request, response, authentication) -> {
+
+						// Obtiene el rol del usuario autenticado
+						Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) authentication.getAuthorities();
+						String role = authorities.stream()
+								.map(GrantedAuthority::getAuthority)
+								.findFirst()
+								.orElse("");
+
+						// Redirecciona al controlador correspondiente al rol del usuario
+						switch (role) {
+							case "ROLE_DOCTOR":
+								response.sendRedirect("/doctor/");
+								break;
+							case "ROLE_PACIENTE":
+								response.sendRedirect("/paciente/");
+								break;
+							default:
+								response.sendRedirect("/personal/");
+								break;
+						}
+
+
+
+
+
+
+					});
+
+
 
 				})
 
@@ -95,6 +126,18 @@ public class SecurityConfiguration {
 							.migrateSession(); // previene que se obtenga el ID de session
 
 				})
+				.exceptionHandling(
+						httpSecurityExceptionHandlingConfigurer ->{
+							httpSecurityExceptionHandlingConfigurer.accessDeniedHandler((request, response, accessDeniedException) ->
+							{
+								request.getSession().setAttribute("mensaje", "Accede con el perfil correspondiente");
+								response.sendRedirect("/login");
+
+							});
+
+						}
+
+				)
 				.build();
 
 	}

@@ -1,13 +1,18 @@
 package com.inventor.app.controller;
 
 import com.inventor.app.model.Cita;
+import com.inventor.app.repository.CredencialesRepo;
+import com.inventor.app.repository.UsuarioRepo;
 import com.inventor.app.service.CitaService;
 import com.inventor.app.service.DoctorService;
 import com.inventor.app.service.PacienteService;
 import com.inventor.app.util.AuthorityName;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +44,10 @@ public class PersonalController {
 
     @Autowired
     private CitaService citaService;
-
+    @Autowired
+    private UsuarioRepo usuarioRepo;
+    @Autowired
+    private CredencialesRepo credencialesRepo;
     @PostMapping("/nuevo")
     public String neuvoUsuario(@ModelAttribute("usuario") Usuario usuario, HttpServletRequest request,Model model){
         Doctor doctor = new Doctor();   
@@ -180,7 +188,19 @@ public class PersonalController {
     }
 
 
+    @GetMapping(value = "/")
+    public String endPointPublico(HttpServletRequest request, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String msg = "Estás accediendo al end point sin realizar una autentificación ya que es un end point publico";
+        if (auth.isAuthenticated()) {
 
+            Usuario usuario = usuarioRepo.findByCredenciales( credencialesRepo.findByCreUsername(auth.getName()).get()).get();
+            msg = "Bienvenido" + usuario.getUserNombre() ;
+        }
+        model.addAttribute("message", msg);
+
+        return "consultas/reporte";
+    }
 
 
 

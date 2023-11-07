@@ -19,8 +19,8 @@
         
         
         <form th:if="${tipo == 'usuario'}" th:action="@{/personal/nuevo}" method="post"    th:object="${usuario}">
-            <label for="userNombre">Nombre:</label>
-            <input type="text" id="userNombre" name="userNombre"     th:field="*{userNombre}"><br><br>
+            <label for="userNombree">Nombre:</label>
+            <input type="text" id="userNombree" name="userNombre"     th:field="*{userNombre}"><br><br>
     
             <label for="userApellido">Apellido:</label>
             <input type="text" id="userApellido" name="userApellido"   th:field="*{userApellido}">    <br><br>
@@ -52,7 +52,7 @@
         </form>
 
         <form th:if="${tipo == 'paciente'}" th:action="@{/personal/savepaciente}" method="post"    th:object="${paciente}">
-            <label for="userNombre">Nacimiento:</label>
+            <label for="userNombree">Nacimiento:</label>
             <input type="date" id="Nacimiento" name="Nacimiento" th:field="*{pacFechaNacimiento}">
             <br><br>
     
@@ -72,7 +72,7 @@
 
 
         <form th:if="${tipo == 'doctor'}" th:action="@{/personal/savedoctor}" method="post"    th:object="${doctor}">
-            <label for="userNombre">Especialidad:</label>
+            <label for="userNombree">Especialidad:</label>
             <select id="especialidad" name="especialidad" th:field="*{docEspecialidad}">
                 <option value="">Selecciona una especialidad</option>
                 <option value="Cardiología">Cardiología</option>

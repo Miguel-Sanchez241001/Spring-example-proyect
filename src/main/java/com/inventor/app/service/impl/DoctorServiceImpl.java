@@ -14,7 +14,6 @@ import com.inventor.app.repository.DoctorRepo;
 import com.inventor.app.service.DoctorService;
 
 
-
 @Service
 public class DoctorServiceImpl implements DoctorService {
 
@@ -44,6 +43,11 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<Doctor> getAllDoctors() {
         return (List<Doctor>) doctorrepo.findAll();
+    }
+
+    @Override
+    public List<Doctor> buscarPorEspecialidad(String especialidad) {
+        return doctorrepo.findByDocEspecialidad(especialidad) ;
     }
 
     @Override

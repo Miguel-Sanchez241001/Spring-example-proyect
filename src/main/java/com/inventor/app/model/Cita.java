@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -26,12 +27,25 @@ public class Cita {
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
 
-    @Column(columnDefinition = "TIMESTAMP")
-    private LocalDateTime fechaHoraCita;
+    @ManyToOne
+    @JoinColumn(name = "horario_id")
+    private Horario horario;
+
+    @Column(columnDefinition = "DATE")
+    private LocalDate fechaCita;
+
+
+
     private String estado;
 
 
+    public LocalDate getFechaCita() {
+        return fechaCita;
+    }
 
+    public void setFechaCita(LocalDate fechaCita) {
+        this.fechaCita = fechaCita;
+    }
 
 
 

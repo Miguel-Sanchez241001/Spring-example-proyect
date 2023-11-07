@@ -2,6 +2,7 @@ package com.inventor.app.service.impl;
 
 import com.inventor.app.model.Cita;
 import com.inventor.app.model.Doctor;
+import com.inventor.app.model.Horario;
 import com.inventor.app.model.Paciente;
 import com.inventor.app.repository.CitaRepo;
 import com.inventor.app.service.CitaService;
@@ -56,4 +57,6 @@ public class CitaServiceImpl implements CitaService {
     public void cambiarEstadoCita(Cita cita) {
             citaRepo.save(cita);
     }
+
+
 }
