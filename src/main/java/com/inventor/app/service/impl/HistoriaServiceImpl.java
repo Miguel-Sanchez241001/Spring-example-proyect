@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.inventor.app.model.Historia;
+import com.inventor.app.model.Paciente;
 import com.inventor.app.repository.HistoriaRepo;
 import com.inventor.app.service.HistoriaService;
 
@@ -43,6 +44,11 @@ public class HistoriaServiceImpl implements HistoriaService{
     public void deleteDetail(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteDetail'");
+    }
+
+    @Override
+    public Optional<Historia> buscarHistoria(Paciente paciente) {
+        return historiaRepo.findByHistPaciente(paciente);
     }
     
 }

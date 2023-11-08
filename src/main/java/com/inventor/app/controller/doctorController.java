@@ -7,7 +7,6 @@ import com.inventor.app.service.CitaService;
 import com.inventor.app.service.HistoriaService;
 import com.inventor.app.service.impl.DoctorServiceImpl;
 import com.inventor.app.service.impl.PacienteServiceImpl;
-import com.inventor.app.service.impl.UsuarioServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,8 +24,7 @@ import java.util.List;
 public class DoctorController {
 
 
-    @Autowired
-    private UsuarioServiceImpl usuarioServiceImpl;
+
     @Autowired
     private UsuarioRepo usuarioRepo;
     @Autowired
@@ -73,7 +71,7 @@ public class DoctorController {
               historia.setHistPaciente(paciente);
               historiaService.saveHistoria(historia);
 
-        request.setAttribute("mensaje", "Exito registrando usuario");
+        request.setAttribute("mensaje", "Exito registrando historia");
         return "forms/historia";
 
     }
@@ -148,4 +146,20 @@ public class DoctorController {
         return "consultas/reporte";
     }
     
+
+    @RequestMapping("/buscarHistoria")
+    public String buscarHistoria(Model model,HttpServletRequest request){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Doctor doctor =  doctorServiceImpl.buscarPacienteByUsuario(auth.getName());
+        List<Cita> citas = citaService.ObtenerCitasDocto(doctor);
+        model.addAttribute("citas", citas);
+
+        Integer idPaciente = Integer.parseInt(request.getParameter("pacienteHistoria"));
+        Paciente paciente = pacienteServiceImpl.getPacientebyId(Long.valueOf(idPaciente)).get();
+        Historia historianueva = historiaService.buscarHistoria(paciente).get();
+        model.addAttribute("historianueva", historianueva);
+        model.addAttribute("formpacienteper", true);
+        return "forms/historia";
+    }
 }

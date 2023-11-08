@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.inventor.app.model.Historia;
+import com.inventor.app.model.Paciente;
 
 public interface HistoriaService {
 
@@ -18,6 +19,7 @@ public interface HistoriaService {
     Historia updateHistoria(Historia pd,Long id);
     
     void deleteDetail(Long id);
+    Optional<Historia> buscarHistoria(Paciente paciente);
 
     
 }

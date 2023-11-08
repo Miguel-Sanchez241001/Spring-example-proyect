@@ -19,12 +19,16 @@
         $("#crear-cita").click(function() {
             $("#formulario-cita").show();
             $("#tabla-citas").hide();
+            $("#form-cita-paciente").hide();
         });
 
         // Al hacer clic en el botón "Ver citas", muestra la tabla
         $("#ver-citas").click(function() {
             $("#formulario-cita").hide();
-            $("#tabla-citas").show();
+            $("#tabla-citas").show();   
+            $("#form-cita-paciente").hide();
+            $("input").val("");
+        
         });
     });
 </script>
@@ -34,15 +38,15 @@
 
 <div id="cuerpo"style="height: 950px; "class="container-md">
     <h1 class="display-1" >Historias Clinicas</h1>
-    <button class="btn btn-dark position-relative top-0 start-50 translate-middle btn-primary " id="ver-citas">Ver historias</button>
+    <button th:if="${#authorization.expression('hasRole(''ROLE_DOCTOR'')')}"class="btn btn-dark position-relative top-0 start-50 translate-middle btn-primary " id="ver-citas">Ver historias</button>
 
-    <button class="btn btn-dark position-relative top-0 start-50 translate-middle btn-primary " id="crear-cita">Crear historias</button>
+    <button th:if="${#authorization.expression('hasRole(''ROLE_DOCTOR'')')}" class="btn btn-dark position-relative top-0 start-50 translate-middle btn-primary " id="crear-cita">Crear historias</button>
 
     <div th:if="${#authorization.expression('hasRole(''ROLE_DOCTOR'')')}" id="tabla-citas" style="display: none;">
         <form th:action="@{/doctor/buscarHistoria}" method="post">
             <div class="mb-3">
-                <select id="citaEstado" name="citaEstado" class="form-select">
-                    <option th:each="cita : ${citas}" th:value="${cita.paciente.pacUsuario.userNombre}" th:text="${cita.paciente.pacUsuario.userNombre}"></option>
+                <select id="pacienteHistoria" name="pacienteHistoria" class="form-select">
+                    <option th:each="cita : ${citas}" th:value="${cita.paciente.pacId}" th:text="${cita.paciente.pacUsuario.userNombre}"></option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Buscar</button>
@@ -92,7 +96,45 @@
 
     </div>
 
-
+    <form th:action="@{/doctor/actualizarhistoria}" th:object="${historianueva}" id="form-cita-paciente" th:if="${formpacienteper}"method="post">
+        <div class="mb-3">
+            <input type="text" id="histDiagnostico" name="histDiagnostico" class="form-control" placeholder="Historial de diagnóstico" th:field="*{histDiagnostico}"/>
+        </div>
+        <div class="mb-3">
+            <input type="datetime-local" id="fechaHoraHistoriaAtencion" name="fechaHoraHistoriaAtencion" class="form-control" placeholder="Fecha y hora de la historia de atención" th:value="*{fechaHoraHistoriaAtencion}" />
+        </div>
+        <div class="mb-3">
+            <input type="text" id="pertenenciaEtnicaHist" name="pertenenciaEtnicaHist" class="form-control" placeholder="Pertenencia étnica" th:field="*{pertenenciaEtnicaHist}" />
+        </div>
+        <div class="mb-3">
+            <input type="datetime-local" id="fechaHoraHistoriaActual" name="fechaHoraHistoriaActual" class="form-control" placeholder="Fecha y hora de la historia actual" th:value="*{fechaHoraHistoriaActual}" />
+        </div>
+        <div class="mb-3">
+            <input type="text" id="lnacimientoHit" name="lnacimientoHit" class="form-control" placeholder="Lugar de nacimiento" th:field="*{lnacimientoHit}" />
+        </div>
+        <div class="mb-3">
+            <input type="text" id="gradoDeInstruccion" name="gradoDeInstruccion" class="form-control" placeholder="Grado de instrucción" th:field="*{gradoDeInstruccion}" />
+        </div>
+        <div class="mb-3">
+            <input type="text" id="grupoSanguineo" name="grupoSanguineo" class="form-control" placeholder="Grupo sanguíneo" th:field="*{grupoSanguineo}" />
+        </div>
+        <div class="mb-3">
+            <label >FactorRh:</label>
+            <input type="checkbox" id="factorRh" name="factorRh" class="form-check-input" placeholder="Factor Rh" th:field="*{factorRh}" />
+        </div>
+        <div class="mb-3">
+            <input type="text" id="dniFamiliar" name="dniFamiliar" class="form-control" placeholder="DNI del familiar" th:field="*{dniFamiliar}" />
+        </div>
+        <div class="mb-3">
+            <textarea id="histNotas" name="histNotas" class="form-control" placeholder="Notas" rows="5" cols="50" th:field="*{histNotas}"></textarea>
+        </div>
+        <div th:if="${#authorization.expression('hasRole(''ROLE_DOCTOR'')')}" class="mb-3">
+            <select id="paciente" name="paciente" class="form-select">
+                <option th:each="cita : ${citas}" th:value="${cita.paciente.getPacId()}" th:text="${cita.paciente.pacUsuario.userNombre}"></option>
+            </select>
+        </div>
+        <button th:if="${#authorization.expression('hasRole(''ROLE_DOCTOR'')')}" type="submit" class="btn btn-primary">Actualizar</button>
+    </form>
 
 
 

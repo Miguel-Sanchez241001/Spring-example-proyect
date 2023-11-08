@@ -5,10 +5,8 @@ import com.inventor.app.model.Doctor;
 import com.inventor.app.model.Horario;
 import com.inventor.app.repository.DoctorRepo;
 import com.inventor.app.repository.HorarioRepo;
-import com.inventor.app.service.CitaService;
-import com.inventor.app.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,13 +22,10 @@ public class CitaRestController {
     private DoctorRepo doctorRepo;
     @Autowired
     private HorarioRepo horarioRepo;
-    @Autowired
-    private CitaService citaService;
+
     @GetMapping(value = "/especialidad/{especialidadName}" ) // , produces = MediaType.TEXT_EVENT_STREAM_VALUE trae problemas para manejar la data la convertiene toda a texto
     public Flux<Doctor> getDoctorsBySpecialty(@PathVariable String especialidadName) {
-
         Flux<Doctor> flux = Flux.fromIterable(doctorRepo.findByDocEspecialidad(especialidadName));
-
         return flux;
     }
     @GetMapping(value = "/horario/{doctor}/{fecha}" ) // , produces = MediaType.TEXT_EVENT_STREAM_VALUE trae problemas para manejar la data la convertiene toda a texto
