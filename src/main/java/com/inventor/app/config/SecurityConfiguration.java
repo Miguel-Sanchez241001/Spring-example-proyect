@@ -1,35 +1,20 @@
 package com.inventor.app.config;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-
-import com.inventor.app.service.PmedicoService;
-
-import org.springframework.security.config.Customizer;
 
 @Configuration
 @EnableWebSecurity
@@ -70,26 +55,23 @@ public class SecurityConfiguration {
 
 				.authorizeHttpRequests(auth -> {
 					auth.requestMatchers("/").permitAll()
-							.requestMatchers("../static/**").permitAll()
+				//	.requestMatchers(new AntPathRequestMatcher("/resources/**")).permitAll()
+							.requestMatchers("/templates/assets/**").permitAll()
 					.requestMatchers("/doctor/**").hasRole("DOCTOR")
 					.requestMatchers("/personal/**").hasRole("PMEDICO")
 					.requestMatchers("/paciente/**").hasRole("PACIENTE")
-
 							.anyRequest().authenticated();
 				})
 				.formLogin(login -> {
-
 					login.permitAll();
 					login.loginPage("/login");
 					login.successHandler((request, response, authentication) -> {
-
 						// Obtiene el rol del usuario autenticado
 						Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) authentication.getAuthorities();
 						String role = authorities.stream()
 								.map(GrantedAuthority::getAuthority)
 								.findFirst()
 								.orElse("");
-
 						// Redirecciona al controlador correspondiente al rol del usuario
 						switch (role) {
 							case "ROLE_DOCTOR":
@@ -102,18 +84,8 @@ public class SecurityConfiguration {
 								response.sendRedirect("/personal/");
 								break;
 						}
-
-
-
-
-
-
 					});
-
-
-
 				})
-
 				.sessionManagement(sesionconfig -> {
 					sesionconfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
 					sesionconfig.invalidSessionUrl("/login");
@@ -126,8 +98,7 @@ public class SecurityConfiguration {
 							.migrateSession(); // previene que se obtenga el ID de session
 
 				})
-				.exceptionHandling(
-						httpSecurityExceptionHandlingConfigurer ->{
+				.exceptionHandling(	httpSecurityExceptionHandlingConfigurer ->{
 							httpSecurityExceptionHandlingConfigurer.accessDeniedHandler((request, response, accessDeniedException) ->
 							{
 								request.getSession().setAttribute("mensaje", "Accede con el perfil correspondiente");
@@ -135,9 +106,7 @@ public class SecurityConfiguration {
 
 							});
 
-						}
-
-				)
+						}	)
 				.build();
 
 	}
@@ -148,6 +117,10 @@ public class SecurityConfiguration {
 		return new SessionRegistryImpl();
 	}
 
+	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer() {
+		return (web) -> web.ignoring().requestMatchers("/templates/assets/**");
+	}
 
 
 

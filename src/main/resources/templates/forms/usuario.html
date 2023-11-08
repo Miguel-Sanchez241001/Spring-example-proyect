@@ -14,97 +14,124 @@
         
     <header  th:replace="~{plantilla/menu :: menu}" ></header>
     
-    <div id="cuerpo">
+    <div id="cuerpo " style="height: 800px;" class="container-md">
         <h1>Formulario de Usuario</h1>
-        
-        
-        <form th:if="${tipo == 'usuario'}" th:action="@{/personal/nuevo}" method="post"    th:object="${usuario}">
-            <label for="userNombree">Nombre:</label>
-            <input type="text" id="userNombree" name="userNombre"     th:field="*{userNombre}"><br><br>
-    
-            <label for="userApellido">Apellido:</label>
-            <input type="text" id="userApellido" name="userApellido"   th:field="*{userApellido}">    <br><br>
-    
-            <label for="userCorreo">Correo:</label>
-            <input type="email" id="userCorreo" name="userCorreo"    th:field="*{userCorreo}">   <br><br>
-    
-            <label for="userEdad">Edad:</label>
-            <input type="number" id="userEdad" name="userEdad"       th:field="*{userEdad}">    <br><br>
-    
-            <label for="userSexo">Sexo:</label>
-            <select id="userSexo" name="userSexo" th:field="*{userSexo}">
-                <option value="MUJER">Mujer</option>
-                <option value="HOMBRE">Hombre</option>
-            </select>
-            <br><br>
-    
-            <label for="userTipo">Tipo:</label>
-            <select id="userTipo" name="userTipo" th:field="*{userTipo}">
-                <option value="PACIENTE">Paciente</option>
-                <option value="DOCTOR">Doctor</option>
-                <option value="PMEDICO">Personal</option>
-            </select>
-            <br><br>
-            <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password"            ><br><br> 
-            <input type="submit" value="Enviar">
-            
-        </form>
 
-        <form th:if="${tipo == 'paciente'}" th:action="@{/personal/savepaciente}" method="post"    th:object="${paciente}">
-            <label for="userNombree">Nacimiento:</label>
-            <input type="date" id="Nacimiento" name="Nacimiento" th:field="*{pacFechaNacimiento}">
-            <br><br>
-    
-            <label for="userApellido">Direccion:</label>
-            <input type="text" id="userApellido" name="Direccion"   th:field="*{pacDireccion}">    <br><br>
-    
-            <label for="userCorreo">Telefono:</label>
-            <input type="text" id="telefono" name="telefono" th:field="*{pacNumeroTelefono}"
-                   pattern="9\d{8}" title="Ingresa un número de 9 dígitos que comience con 9" required>
-            <br><br>
 
-             
-            <input type="text" style="display: none;" name="iduser"    th:value="${idUser}"> 
-            <input type="submit" value="Enviar">
-            
+        <form class="container-sm" th:if="${tipo == 'usuario'}" th:action="@{/personal/nuevo}" method="post" th:object="${usuario}">
+            <div class="mb-3">
+                <label for="userNombree" class="form-label">Nombre:</label>
+                <input type="text" id="userNombree" name="userNombre" class="form-control" th:field="*{userNombre}">
+            </div>
+
+            <div class="mb-3">
+                <label for="userApellido" class="form-label">Apellido:</label>
+                <input type="text" id="userApellido" name="userApellido" class="form-control" th:field="*{userApellido}">
+            </div>
+
+            <div class="mb-3">
+                <label for="userCorreo" class="form-label">Correo:</label>
+                <input type="email" id="userCorreo" name="userCorreo" class="form-control" th:field="*{userCorreo}">
+            </div>
+
+            <div class="mb-3">
+                <label for="userEdad" class="form-label">Edad:</label>
+                <input type="number" id="userEdad" name="userEdad" class="form-control" th:field="*{userEdad}">
+            </div>
+
+            <div class="mb-3">
+                <label for="userSexo" class="form-label">Sexo:</label>
+                <select id="userSexo" class="form-select" name="userSexo" th:field="*{userSexo}">
+                    <option value="MUJER">Mujer</option>
+                    <option value="HOMBRE">Hombre</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="userTipo" class="form-label">Tipo:</label>
+                <select id="userTipo" class="form-select" name="userTipo" th:field="*{userTipo}">
+                    <option value="PACIENTE">Paciente</option>
+                    <option value="DOCTOR">Doctor</option>
+                    <option value="PMEDICO">Personal</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña:</label>
+                <input type="password" id="password" name="password" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Enviar</button>
         </form>
 
 
-        <form th:if="${tipo == 'doctor'}" th:action="@{/personal/savedoctor}" method="post"    th:object="${doctor}">
-            <label for="userNombree">Especialidad:</label>
-            <select id="especialidad" name="especialidad" th:field="*{docEspecialidad}">
-                <option value="">Selecciona una especialidad</option>
-                <option value="Cardiología">Cardiología</option>
-                <option value="Dermatología">Dermatología</option>
-                <option value="Ginecología">Ginecología</option>
-                <option value="Neurología">Neurología</option>
-                <option value="Oftalmología">Oftalmología</option>
-            </select>
-    
-            <label for="userApellido">Consultorio:</label>
-            <select id="consultorio" name="consultorio" th:field="*{docConsultorio}">
-                <option value="">Selecciona un consultorio</option>
-                <option value="B-105">B-105</option>
-                <option value="C-201">C-201</option>
-                <option value="D-110">D-110</option>
-                <option value="E-301">E-301</option>
-                <option value="F-205">F-205</option>
-            </select>
-    
-            <label for="userCorreo">Telefono:</label>
-            <input type="text" id="telefono" name="telefono" th:field="*{docnumeroTelefono}"
-                   pattern="9\d{8}" title="Ingresa un número de 9 dígitos que comience con 9" required>
-            <br><br>
+        <form class="container-sm" th:if="${tipo == 'paciente'}" th:action="@{/personal/savepaciente}" method="post" th:object="${paciente}">
+            <div class="mb-3">
+                <label for="Nacimiento" class="form-label">Nacimiento:</label>
+                <input type="date" id="Nacimiento" name="Nacimiento" class="form-control" th:field="*{pacFechaNacimiento}">
+            </div>
 
-            <input type="text" style="display: none;" name="iduser"    th:value="${idUser}">
-            <input type="submit" value="Enviar">
-            
+            <div class="mb-3">
+                <label for="userApellido" class="form-label">Direccion:</label>
+                <input type="text" id="userApellido" name="Direccion" class="form-control" th:field="*{pacDireccion}">
+            </div>
+
+            <div class="mb-3">
+                <label for="telefono" class="form-label">Telefono:</label>
+                <input type="text" id="telefono" name="telefono" class="form-control" th:field="*{pacNumeroTelefono}" pattern="9\d{8}" title="Ingresa un número de 9 dígitos que comience con 9" required>
+            </div>
+
+            <input type="text" style="display: none;" name="iduser" th:value="${idUser}">
+
+            <button type="submit" class="btn btn-primary">Enviar</button>
         </form>
 
 
+
+        <form class="container-sm" th:if="${tipo == 'doctor'}" th:action="@{/personal/savedoctor}" method="post" th:object="${doctor}">
+            <div class="mb-3">
+                <label for="especialidad" class="form-label">Especialidad:</label>
+                <select id="especialidad" name="especialidad" class="form-select" th:field="*{docEspecialidad}">
+                    <option value="">Selecciona una especialidad</option>
+                    <option value="Cardiología">Cardiología</option>
+                    <option value="Dermatología">Dermatología</option>
+                    <option value="Ginecología">Ginecología</option>
+                    <option value="Neurología">Neurología</option>
+                    <option value="Oftalmología">Oftalmología</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="consultorio" class="form-label">Consultorio:</label>
+                <select id="consultorio" name="consultorio" class="form-select" th:field="*{docConsultorio}">
+                    <option value="">Selecciona un consultorio</option>
+                    <option value="B-105">B-105</option>
+                    <option value="C-201">C-201</option>
+                    <option value="D-110">D-110</option>
+                    <option value="E-301">E-301</option>
+                    <option value="F-205">F-205</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="telefono" class="form-label">Telefono:</label>
+                <input type="text" id="telefono" name="telefono" class="form-control" th:field="*{docnumeroTelefono}" pattern="9\d{8}" title="Ingresa un número de 9 dígitos que comience con 9" required>
+            </div>
+
+            <input type="text" style="display: none;" name="iduser" th:value="${idUser}">
+
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+
+
+        <p class="h5" th:text="${mensaje}"></p>
     </div>
-        <p th:text="${mensaje}"></p>
+
+
+
+
+
+
     <footer  th:replace="~{plantilla/plantilla :: plantilla}" ></footer>
     
     

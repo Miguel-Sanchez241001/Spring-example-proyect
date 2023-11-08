@@ -3,6 +3,7 @@ package com.inventor.app.controller;
 import com.inventor.app.model.Usuario;
 import com.inventor.app.repository.CredencialesRepo;
 import com.inventor.app.repository.UsuarioRepo;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 public class ContenController {
 	@RequestMapping("/")
-	public String Golistar() {
+	public String Golistar(HttpServletResponse response) {
 
 		return "index";
 	}

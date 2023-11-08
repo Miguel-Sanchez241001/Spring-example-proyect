@@ -65,14 +65,14 @@
 </script>
 
 <header  th:replace="~{plantilla/menu :: menu}" ></header>
-<div id="cuerpo">
-    <h1>Citas Clinicas</h1>
+<div id="cuerpo"style="height: 800px; "class="container-md">
+    <h1 class="display-1" >Citas Clinicas</h1>
 
 
 
-    <button th:if="${#authorization.expression('hasRole(''ROLE_PACIENTE'')')}" id="crear-cita">Crear cita</button>
+    <button class="btn btn-dark position-relative top-0 start-50 translate-middle  btn-primary "  th:if="${#authorization.expression('hasRole(''ROLE_PACIENTE'')')}" id="crear-cita">Crear cita</button>
 
-    <button id="ver-citas">Ver citas</button>
+    <button class="btn btn-dark position-relative top-0 start-50 translate-middle btn-primary "  id="ver-citas">Ver citas</button>
 
     <div th:if="${#authorization.expression('hasRole(''ROLE_PACIENTE'')')}" id="formulario-cita" style="display: none;">
 
@@ -81,9 +81,9 @@
 
 
 
-
+            <div class="mb-3">
             <label >Especialidad:</label>
-            <select id="especialidadId" name="especialidad" >
+            <select class="form-select" id="especialidadId" name="especialidad" >
                 <option value="">Selecciona una especialidad</option>
                 <option value="Cardiología">Cardiología</option>
                 <option value="Dermatología">Dermatología</option>
@@ -91,24 +91,36 @@
                 <option value="Neurología">Neurología</option>
                 <option value="Oftalmología">Oftalmología</option>
             </select>
+            </div>
+            <div class="mb-3">
+                <label >Doctor:</label>
 
-
-            <select id="doctorSelect"  th:field="*{doctor}">
+                <select class="form-select" id="doctorSelect"  th:field="*{doctor}">
                 <option value="">Seleccione un doctor</option>
             </select>
-            <input type="date" id="fechaHoraCita" th:field="*{fechaCita}">
 
+    </div>
+            <div class="mb-3">
+                <label >Fecha:</label>
 
-            <select id="horarioSelect" name="horario" th:field="*{horario}">
+                <input type="date" id="fechaHoraCita" th:field="*{fechaCita}">
+            </div>
+
+            <div class="mb-3">
+                <label >Horario:</label>
+
+                <select class="form-select" id="horarioSelect" name="horario" th:field="*{horario}">
                 <option value="">Seleccione un horario</option>
             </select>
-
-
-            <input type="submit" value="Enviar">
+            </div>
+            <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            </div>
             </form>
     </div>
-    <div th:if="${#authorization.expression('hasRole(''ROLE_PACIENTE'')')}" id="tabla-citas" style="display: none;">
-        <table>
+    <div th:if="${#authorization.expression('hasRole(''ROLE_PACIENTE'')')}" id="tabla-citas" class="container-md" style="display: none;">
+        <table class="table table-striped">
+
             <tr>
                 <th>Fecha</th>
                 <th>Especialidad</th>
@@ -136,8 +148,9 @@
 
 
 
-    <div th:if="${#authorization.expression('hasRole(''ROLE_PMEDICO'')')}" id="tabla-citas" style="display: none;">
-        <table>
+    <div th:if="${#authorization.expression('hasRole(''ROLE_PMEDICO'')')}" id="tabla-citas"class="container-md" style="display: none;">
+        <table class="table table-striped">
+
             <tr>
                 <th>Fecha</th>
                 <th>Especialidad</th>
@@ -154,7 +167,7 @@
                     <td th:text="${cita.doctor.getDocEspecialidad()}"></td>
                     <td th:text="${cita.doctor.getDocUsuario().getUserNombre()}"></td>
                     <td>
-                        <select name="citaEstado">
+                        <select class="form-select" name="citaEstado">
                             <option selected="true" disabled="disabled" th:text=" ${cita.estado +' ESTADO PREVIO'}"></option>
                             <option value="PENDIENTE">PENDIENTE</option>
                             <option value="APROBADA">APROBADA</option>
@@ -166,7 +179,7 @@
                     <td th:text="${cita.paciente.getPacUsuario().userNombre}"></td>
                     <td >
 
-                        <input type="submit" value="Enviar"></td>
+                        <input type="submit" class="btn btn-dark" value="Enviar"></td>
 
                     <input type="hidden"name="citaId" th:value="${cita.idCita}" />
                 </form>
@@ -176,8 +189,9 @@
             </tr>
         </table>
     </div>
-    <div th:if="${#authorization.expression('hasRole(''ROLE_DOCTOR'')')}" id="tabla-citas" style="display: none;">
-        <table>
+    <div th:if="${#authorization.expression('hasRole(''ROLE_DOCTOR'')')}" id="tabla-citas" class="container-md"style="display: none;">
+        <table class="table table-striped">
+
             <tr>
                 <th>Fecha</th>
                 <th>Especialidad</th>
@@ -194,7 +208,7 @@
                     <td th:text="${cita.doctor.getDocEspecialidad()}"></td>
                     <td th:text="${cita.doctor.getDocUsuario().getUserNombre()}"></td>
                     <td>
-                        <select name="citaEstado">
+                        <select class="form-select" name="citaEstado">
                             <option selected="true" disabled="disabled" th:text=" ${cita.estado +' ESTADO PREVIO'}"></option>
                             <option value="ATENDIDA">ATENDIDA</option>
                         </select>
@@ -203,7 +217,7 @@
                     <td th:text="${cita.paciente.getPacUsuario().userNombre}"></td>
                     <td >
 
-                        <input type="submit" value="Enviar"></td>
+                        <input type="submit" class="btn btn-dark" value="Enviar"></td>
 
                     <input type="hidden"name="citaId" th:value="${cita.idCita}" />
                 </form>

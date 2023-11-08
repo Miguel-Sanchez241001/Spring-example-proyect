@@ -141,7 +141,7 @@ public class DoctorController {
         if (auth.isAuthenticated()) {
 
             Usuario usuario = usuarioRepo.findByCredenciales( credencialesRepo.findByCreUsername(auth.getName()).get()).get();
-            msg = "Bienvenido" + usuario.getUserNombre() ;
+            msg = "Bienvenido " + usuario.getUserNombre() ;
         }
         model.addAttribute("message", msg);
 
